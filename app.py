@@ -38,11 +38,15 @@ def exporter_resultats(df,sentiment):
   resum = []
   for s in sentiment :
     part = s.split(';')
-    sent.append(part[1])
-    resum.append(part[0])
+    if len(part)==2:
+      sent.append(part[1])
+      resum.append(part[0])
+    else :
+      sent.append(None)
+      resum.append(None)
   df["résumé"] = resum
   df["sentiment"] = sent
-  ds = df.groupby(["sentiment"])["id"].count()
+  ds = df["sentiment"].value_counts()
   html_avis = ds.to_frame().to_html()
   st.dataframe(ds)
   return html_avis
